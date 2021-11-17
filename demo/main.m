@@ -19,19 +19,20 @@ for i=1:scannum
     model{i} = awgn(model{i},25*jj);
 end
 opt.downSample=0;
-opt.radii = 0.02;
+opt.radii = 0.002;
 opt.H=10;
 opt.k=5;
 opt.s=1000;
-[vecs,lambda,n]=computeDescriper(model{1},opt);
+[Dx,model{1}]=computeDescriper(model{1},opt);
+[Dy,model{2}]=computeDescriper(model{2},opt);
 %% 验证下vecs
-KDtree= createns(model{1}');
-[corr,TD] = knnsearch(KDtree,model{1}',"k",6);
-n=[1,3,4,4];
-dist=norm(vecs{1,n(1)}(:,n(2)));
-dist2=norm(vecs{1,n(3)}(:,n(4)));
-distTD=TD(n(1),n(2)+1);
-distTD2=TD(n(3),n(4)+1);
-diff1=dist-distTD;
-diff2=dist2-distTD2;
+% KDtree= createns(model{1}');
+% [corr,TD] = knnsearch(KDtree,model{1}',"k",6);
+% n=[1,3,4,4];
+% dist=norm(vecs{1,n(1)}(:,n(2)));
+% dist2=norm(vecs{1,n(3)}(:,n(4)));
+% distTD=TD(n(1),n(2)+1);
+% distTD2=TD(n(3),n(4)+1);
+% diff1=dist-distTD;
+% diff2=dist2-distTD2;
 %% 

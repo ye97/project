@@ -1,4 +1,4 @@
-function [vecs,lambda,n] = computeDescriper(srcCloud,opt)
+function [D,srcCloud] = computeDescriper(srcCloud,opt)
 %This code is the Matlab implimentation of the paper, 
 %"Fast Descriptors and Correspondence Propagation for Robust Global Point Cloud Registration,"
 %IEEE transactions on Image Processing, 2017.
@@ -65,10 +65,12 @@ vecs=[];
 for i=1:M
     vec=[];
     for j=2:opt.k+1
-        vec_ij=srcSeed(:,i)-srcSeed(:,srcIdx{i,1}(1,j));
-         vec_ij=norm(vec_ij);
+        vec_ij=srcSeed(:,i)-srcData(:,srcIdx{i,1}(1,j));
+        vec_ij=norm(vec_ij);
         vec=[vec,vec_ij];
     end
     vecs{i}=vec;
 end
-
+vecs=vecs';
+srcCloud=srcSeed;
+D=[vecs,lambda,n];
