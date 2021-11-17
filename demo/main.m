@@ -23,8 +23,13 @@ opt.radii = 0.002;
 opt.H=10;
 opt.k=5;
 opt.s=1000;
-[Dx,model{1}]=computeDescriper(model{1},opt);
-[Dy,model{2}]=computeDescriper(model{2},opt);
+[DescriptorX,Nx,model{1}]=computeDescriper(model{1},opt);
+[DescriptorY,Ny,model{2}]=computeDescriper(model{2},opt);
+WeightMatrix=computeWeightMatrix(DescriptorX, DescriptorY,3);
+maxN=max(WeightMatrix);
+maxNM=max(maxN);
+
+
 %% 验证下vecs
 % KDtree= createns(model{1}');
 % [corr,TD] = knnsearch(KDtree,model{1}',"k",6);
