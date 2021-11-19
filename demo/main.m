@@ -19,15 +19,28 @@ for i=1:scannum
     model{i} = awgn(model{i},25*jj);
 end
 opt.downSample=0;
-opt.radii = 0.002;
+opt.radii = 2000*0.002;
 opt.H=10;
 opt.k=5;
 opt.s=1000;
-[DescriptorX,Nx,model{1}]=computeDescriper(model{1},opt);
-[DescriptorY,Ny,model{2}]=computeDescriper(model{2},opt);
-WeightMatrix=computeWeightMatrix(DescriptorX, DescriptorY,3);
-maxN=max(WeightMatrix);
-maxNM=max(maxN);
+opt.R=eye(3);
+opt.beta=1;%控制权重矩阵
+opt.alpha=30;%控制点到面权重
+opt.t=[1,1,1]';
+tarData=model{1,1};
+srcData=model{1,2};
+
+
+[tar_vecs,tar_n,tar_lambda,tarData]=computeDescriper(tarData,opt);
+
+shape=transform(srcData,opt.R,opt.t);
+
+[src_vecs,src_n,src_lambda,shape]=computeDescriper(shape,opt);
+
+% WeightMatrix=computeWeightMatrix(tar_vecs,src_vecs,tar_n,src_n,opt.beta);
+% % 查看最大权重组件
+% maxN=max(WeightMatrix);
+% maxNM=max(maxN);
 
 
 %% 验证下vecs

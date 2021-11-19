@@ -1,4 +1,4 @@
-function [D,srcCloud,n] = computeDescriper(srcCloud,opt)
+function [vecs,n,lambda,srcCloud] = computeDescriper(srcCloud,opt)
 %This code is the Matlab implimentation of the paper, 
 %"Fast Descriptors and Correspondence Propagation for Robust Global Point Cloud Registration,"
 %IEEE transactions on Image Processing, 2017.
@@ -14,7 +14,7 @@ if ~isfield(opt,'H') || isempty(opt.H), opt.max_it = 10; end
 if ~isfield(opt,'k') || isempty(opt.k), opt.k = 5; end
 if ~isfield(opt,'downSample') || isempty(opt.downSample), opt.downSample=0; end
 if ~isfield(opt,'s') || isempty(opt.s), opt.s = 1000; end
-if ~isfield(opt,'radii') || isempty(opt.radii), opt.outliers = 0.02; end
+if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
 
 %% parameter configuration for flann search
 params.algorithm = 'kdtree';
@@ -24,7 +24,7 @@ params.checks = 64;
 srcData = srcCloud;
 
 % 半径0.5间隔
-radii = 2000*opt.radii;
+radii = opt.radii;
 
 if opt.downSample==1
     srcCloudDown = pcdownsample(srcCloud, 'gridAverage', gridStep);
@@ -63,14 +63,25 @@ idx = num2cell((1:M)');
 vecs=[];
 
 for i=1:M
-    vec=[];
+    vec=[0,0,0]';
     for j=2:opt.k+1
         vec_ij=srcSeed(:,i)-srcData(:,srcIdx{i,1}(1,j));
-        vec_ij=norm(vec_ij);
-        vec=[vec,vec_ij];
+%         局部距离约束
+%         vec_ij=norm(vec_ij);
+%         vec=[vec,vec_ij];
+          vec=vec+vec_ij./norm(vec_ij);
     end
     vecs{i}=vec;
 end
 vecs=vecs';
 srcCloud=srcSeed;
-D=[vecs,lambda];
+
+vecs=cell2mat(vecs);
+vecs=reshape(vecs,M,3,1);
+
+
+lambda=cell2mat(lambda);
+lambda=reshape(vecs,M,3,1);
+
+n=cell2mat(n);
+n=reshape(vecs,M,3,1);
