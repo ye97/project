@@ -1,8 +1,9 @@
 clc;clear;close all;
-
+%% init
 addpath('./flann/');
 addpath('./data/');
 addpath('./ulity/');
+%% prepare data
 load p(Bun0);
 shape= data';
 scan=shape(:,1);
@@ -18,24 +19,25 @@ for i=1:scannum
     model{i}=scan{i}(1:3,1:res:end);
     model{i} = awgn(model{i},25*jj);
 end
+%% config parameters
 opt.downSample=0;
 opt.radii = 2000*0.002;
 opt.H=10;
 opt.k=5;
-opt.s=1000;
 opt.R=eye(3);
 opt.beta=1;%控制权重矩阵
 opt.alpha=30;%控制点到面权重
 opt.t=[1,1,1]';
+
 tarData=model{1,1};
 srcData=model{1,2};
 
-
-[tar_vecs,tar_n,tar_lambda,tarData]=computeDescriper(tarData,opt);
-
-shape=transform(srcData,opt.R,opt.t);
-
-[src_vecs,src_n,src_lambda,shape]=computeDescriper(shape,opt);
+[T]=local_gmm(tarData,srcData,opt);
+% [tar_vecs,tar_n,tar_lambda,tarData]=computeDescriper(tarData,opt);
+% 
+% shape=transform(srcData,opt.R,opt.t);
+% 
+% [src_vecs,src_n,src_lambda,shape]=computeDescriper(shape,opt);
 
 % WeightMatrix=computeWeightMatrix(tar_vecs,src_vecs,tar_n,src_n,opt.beta);
 % % 查看最大权重组件

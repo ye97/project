@@ -8,13 +8,6 @@ function [vecs,n,lambda,srcCloud] = computeDescriper(srcCloud,opt)
 % contact with Guang JIANG, Xidian University. gjiang@mail.xidian.edu.cn.
 
 
-%% Check the input options and set the defaults
-
-if ~isfield(opt,'H') || isempty(opt.H), opt.max_it = 10; end
-if ~isfield(opt,'k') || isempty(opt.k), opt.k = 5; end
-if ~isfield(opt,'downSample') || isempty(opt.downSample), opt.downSample=0; end
-if ~isfield(opt,'s') || isempty(opt.s), opt.s = 1000; end
-if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
 
 %% parameter configuration for flann search
 params.algorithm = 'kdtree';
@@ -54,6 +47,7 @@ srcIdx = srcIdx(idxSz>10);
 srcSeed = srcSeed(:,idxSz>opt.H);
 % 种子点个数
 M = sum(idxSz>opt.H);
+N=sum(idxSz<=opt.H);
 % 1-M的下标
 idx = num2cell((1:M)');
 % 匿名函数设置x，y

@@ -28,9 +28,9 @@ tarData=model{1,1};
 srcData=model{1,2};
 
 
-[DescriptorTar,tarData]=computeDescriper(tarData,opt);
-% martrixN=cell2mat(DescriptorTar{:,2});
-% ny{:,:}=DescriptorTar{:,2}{:,:};
-d=cell2mat(DescriptorTar);
-
+[tar_vecs,tar_n,tar_lambda,tarData]=computeDescriper(tarData,opt);
+% % martrixN=cell2mat(DescriptorTar{:,2});
+% % ny{:,:}=DescriptorTar{:,2}{:,:};
+% d=cell2mat(DescriptorTar);
+[normals, curvature]=findPointNormals(tarData');
 % [R,t]=pointToPlaneMetric(srcData',tarData',DescriptorTar{:,2});
