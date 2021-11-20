@@ -1,7 +1,7 @@
 % Copyright (c) 2015, Zachary Taylor
 % All rights reserved.
 
-function [ normals, curvature ] = findPointNormals(points, numNeighbours, viewPoint, dirLargest)
+function [ normals, curvature,vecs,dist ] = findPointNormals(points, numNeighbours, viewPoint, dirLargest)
 %FINDPOINTNORMALS Estimates the normals of a sparse set of n 3d points by
 % using a set of the closest neighbours to approximate a plane.
 %
@@ -80,10 +80,17 @@ n = knnsearch(kdtreeobj,points,'k',(numNeighbours+1));
 
 %remove self
 n = n(:,2:end);
+%caculate localVec
+
 
 %find difference in position from neighbouring points
 p = repmat(points(:,1:3),numNeighbours,1) - points(n(:),1:3);
 p = reshape(p, size(points,1),numNeighbours,3);
+
+dist=sqrt(sum(p.*p,3));
+
+% 4026 *5*3;
+
 
 %calculate values for covariance matrix
 C = zeros(size(points,1),6);

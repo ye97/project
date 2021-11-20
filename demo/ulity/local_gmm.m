@@ -9,7 +9,7 @@ if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
 if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
 
 max_it=200;
-[tar_vecs,tar_n,tar_lambda,tarData]=computeDescriper(tarData,opt);
+[tar_n,curvature,localVec,Dist]=findPointNormals(tarData,opt.k);
 [N,D]=size(tarData');
 [M,D]=size(srcData');
 if ~exist('sigma2','var') || isempty(sigma2) || (sigma2==0), 
@@ -26,7 +26,7 @@ WeightMatirx=[];
 %%
 while (iter<max_it) && (sigma2 > 1e-8) 
     TData=transform(srcData,opt.R,opt.t);
-    [src_vecs,src_n,src_lambda,srcData]=computeDescriper(TData,opt);
+    [src_vecs,src_n,src_lambda]=computeDescriper(TData,opt);
     [M,D]=size(srcData');
     WeightMatrix=computeWeightMatrix(tar_vecs,src_vecs, tar_lambda,src_lambda,opt.beta);
     P_prior = WeightMatrix;

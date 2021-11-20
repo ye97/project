@@ -29,8 +29,8 @@ opt.beta=1;%控制权重矩阵
 opt.alpha=30;%控制点到面权重
 opt.t=[1,1,1]';
 
-tarData=model{1,1};
-srcData=model{1,2};
+tarData=model{1,1}';
+srcData=model{1,2}';
 
 [T]=local_gmm(tarData,srcData,opt);
 % [tar_vecs,tar_n,tar_lambda,tarData]=computeDescriper(tarData,opt);
