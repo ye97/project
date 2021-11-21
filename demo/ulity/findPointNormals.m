@@ -1,7 +1,7 @@
 % Copyright (c) 2015, Zachary Taylor
 % All rights reserved.
 
-function [ normals, curvature,vecs ,dist] = findPointNormals(points, numNeighbours,Xi,viewPoint, dirLargest)
+function [ normals, curvature,vecs ,localDist] = findPointNormals(points, numNeighbours,Xi,viewPoint, dirLargest)
 %FINDPOINTNORMALS Estimates the normals of a sparse set of n 3d points by
 % using a set of the closest neighbours to approximate a plane.
 %
@@ -94,9 +94,10 @@ n = n(:,2:end);
 p = repmat(points(:,1:3),numNeighbours,1) - points(n(:),1:3);
 p = reshape(p, size(points,1),numNeighbours,3);
 
-dist=sqrt(sum(p.*p,3));
-temp=repmat(dist,1,1,3);
-vecs=exp(-dist/Xi^2).*p;
+localDist=sqrt(sum(p.*p,3));
+localDist=repmat(localDist,1,1,3);
+
+vecs=exp(-localDist./Xi^2).*p;
 vecs=sum(vecs,2);
 vecs=squeeze(vecs);
 % 4026 *5*3;
@@ -132,6 +133,7 @@ for i = 1:(size(points,1))
     normals(i,:) = v(:,k)';
     
     %store curvature
+%     curvature(i)=lambda;
     curvature(i) = lambda / sum(d);
 end
 

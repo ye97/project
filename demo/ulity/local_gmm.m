@@ -16,20 +16,24 @@ if ~exist('sigma2','var') || isempty(sigma2) || (sigma2==0),
     sigma2=(M*trace(tarData*tarData')+N*trace(srcData*srcData')-2*sum(srcData)*sum(tarData)')/(M*N*D);
 end
 
-
-
-
-
 iter=0;
-WeightMatirx=[];
+WeightMatrix=[];
 
-%%
+
+%% M step
 while (iter<max_it) && (sigma2 > 1e-8) 
     TData=transform(srcData,opt.R,opt.t);
-    [src_n,src_curvature,src_localVec,src_Dist]=findPointNormals(TData,opt.k);
+    [T_n,T_curvature,T_localVec,T_localDist]=findPointNormals(TData,opt.k);
+    %% E step
+    paiMatrix=computePai(tar_localVec,T_localVec, opt.beta);
+    alpha=compute_alpha(tar_curvature,opt.alphamax);
+    gloDist=compute_gloDist(tarData,TData,tar_n,tar_curvature,opt.alphamax);
+    P_prior =comput_Prior(tarData,srcData,paiMatrix,tar_n,tar_curvature);
     
-    WeightMatrix=computeWeightMatrix(tar_localVec,src_localVec,opt.beta);
-    P_prior = WeightMatrix;
+    %% M step
+    
     iter=iter+1;
 end
 T=WeightMatrix;
+disp(iter);
+disp(sigma2);
