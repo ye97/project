@@ -10,7 +10,11 @@ srcData=repmat(srcData,1,1,N);
 srcData=permute(srcData,[3,1,2]);
 tarData=repmat(tarData,1,1,M);
 tarData=permute(tarData,[1,3,2]);
-
+gloDist=sum((tarData-srcData).^2,3);
+% gloDist=sqrt(sum((tarData-srcData).^2,3));
+gloDist=squeeze(gloDist);
+alpha=repmat(alpha,1,M);
+gloDist=gloDist.*alpha;
 % 传统距离
 % gloDist=sqrt(sum((tarData-srcData).^2,3));
 % test=DIST-gloDist;

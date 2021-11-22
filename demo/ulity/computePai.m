@@ -40,7 +40,7 @@ sumM=sum(patMatrix,2);
 sumM==repmat(sumM,1,M);
 patMatrix= patMatrix./sumM;
 
-
-maxN=max(patMatrix);
-maxNM=max(maxN);
+% 
+% maxN=max(patMatrix);
+% maxNM=max(maxN);
 
