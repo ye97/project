@@ -7,7 +7,7 @@ if ~isfield(opt,'downSample') || isempty(opt.downSample), opt.downSample=0; end
 if ~isfield(opt,'s') || isempty(opt.s), opt.s = 1000; end
 if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
 if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
-
+w=0.2;
 max_it=200;
 [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
 [N,D]=size(tarData);
@@ -18,10 +18,10 @@ end
 
 iter=0;
 WeightMatrix=[];
-
+ntol=10;
 
 %% 
-while (iter<max_it) && (sigma2 > 1e-8) 
+while (iter<max_it) && (sigma2 > 1e-8)% && (ntol<1e-8) 
     TData=transform(srcData,opt.R,opt.t);
     [T_n,T_curvature,T_localVec,T_localDist]=findPointNormals(TData,opt.k);
     %% E step
@@ -29,7 +29,8 @@ while (iter<max_it) && (sigma2 > 1e-8)
     alpha=compute_alpha(tar_curvature,opt.alphamax);
     gloDist=compute_gloDist(tarData,TData,tar_n,tar_curvature,alpha);
     P_prior =comput_Prior(paiMatrix,gloDist,w,sigma2);
-    
+    E_con=compute_E(P_prior,alpha,gloDist,sigma2);
+    [R,t]=update(TData,tarData,tar_n,P_prior,alpha,gloDist,sigma2);
     %% M step
     
     iter=iter+1;
