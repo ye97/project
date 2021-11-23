@@ -33,13 +33,19 @@ opt.t=[1,1,1]';
 
 tarData=model{1,1}';
 srcData=model{1,2}';
-% tarData=tarData(1:4010,:);
 % [T]=local_gmm(tarData,srcData,opt);
+% tarData=tarData(1:4010,:);
 
 [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
 TData=transform(srcData,opt.R,opt.t);
 [T_n,T_curvature,T_localVec,T_localDist]=findPointNormals(TData,opt.k);
+
+
+
+% W=ones(4010,4010);
 % [R,t]=pointToPlaneMetric(TData,tarData,tar_n);
+
+% 
 W=ones(4026,4010);
 [R,t]=pointToPlaneW(TData,tarData,tar_n,W);
 result=R_init*R;

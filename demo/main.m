@@ -32,9 +32,11 @@ opt.t=[1,1,1]';
 
 tarData=model{1,1}';
 srcData=model{1,2}';
-
+tic;
+t1=toc;
 [T]=local_gmm(tarData,srcData,opt);
-
+t2=toc;
+time=t2-t1;
 
 % [tar_vecs,tar_n,tar_lambda,tarData]=computeDescriper(tarData,opt);
 % 

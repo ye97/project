@@ -19,9 +19,11 @@ end
 iter=0;
 WeightMatrix=[];
 ntol=10;
+tolerance=1e-9;
+preE_con=0;
 
 %% 
-while (iter<max_it) && (sigma2 > 1e-8)% && (ntol<1e-8) 
+while (iter<max_it) % && (sigma2 > 1e-8)% && (ntol<1e-8) 
     TData=transform(srcData,opt.R,opt.t);
     [T_n,T_curvature,T_localVec,T_localDist]=findPointNormals(TData,opt.k);
     %% E step
@@ -29,12 +31,17 @@ while (iter<max_it) && (sigma2 > 1e-8)% && (ntol<1e-8)
     alpha=compute_alpha(tar_curvature,opt.alphamax);
     gloDist=compute_gloDist(tarData,TData,tar_n,tar_curvature,alpha);
     P_prior =comput_Prior(paiMatrix,gloDist,w,sigma2);
+    alpha_NM=repmat(alpha,1,M);
+    W=P_prior.*alpha;
     E_con=compute_E(P_prior,alpha,gloDist,sigma2);
-    [R,t]=update(TData,tarData,tar_n,P_prior,alpha,gloDist,sigma2);
+    ntol   = abs((E_con-preE_con)/E_con);
+    [R,t,sigma]=pointToPlaneW(TData,tarData,tar_n,W);
+    sigma2=sigma;
+    if(ntol <= tolerance)
+        break;
+    end
     %% M step
-    
     iter=iter+1;
+    disp(iter);
 end
-T=WeightMatrix;
-disp(iter);
-disp(sigma2);
+T=[R,t];

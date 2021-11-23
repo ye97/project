@@ -31,7 +31,7 @@ patMatrix=sum(patMatrix,3);
 patMatrix=sqrt(patMatrix);
 %% 求和分配权重
 % WeightMatrix=cell2mat(WeightMatrix);
-patMatrix=patMatrix./(-2*beta^2)
+patMatrix=patMatrix./(-2*beta^2);
 patMatrix=exp(patMatrix);
 sumM=sum(patMatrix,2);
 
