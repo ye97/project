@@ -7,8 +7,8 @@ if ~isfield(opt,'downSample') || isempty(opt.downSample), opt.downSample=0; end
 if ~isfield(opt,'s') || isempty(opt.s), opt.s = 1000; end
 if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
 if ~isfield(opt,'radii') || isempty(opt.radii), opt.radii = 0.02; end
-w=0.2;
-max_it=200;
+w=0.4;
+max_it=5;
 [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
 [N,D]=size(tarData);
 [M,D]=size(srcData);
@@ -18,12 +18,11 @@ end
 
 iter=0;
 WeightMatrix=[];
-ntol=10;
+ntol=0;
 tolerance=1e-9;
 preE_con=0;
-
 %% 
-while (iter<max_it) % && (sigma2 > 1e-8)% && (ntol<1e-8) 
+while (iter<max_it) %&& (ntol<1e-8) % && (sigma2 > 1e-8)% 
     TData=transform(srcData,opt.R,opt.t);
     [T_n,T_curvature,T_localVec,T_localDist]=findPointNormals(TData,opt.k);
     %% E step
@@ -34,8 +33,8 @@ while (iter<max_it) % && (sigma2 > 1e-8)% && (ntol<1e-8)
     alpha_NM=repmat(alpha,1,M);
     W=P_prior.*alpha;
     E_con=compute_E(P_prior,alpha,gloDist,sigma2);
-    ntol   = abs((E_con-preE_con)/E_con);
-    [R,t,sigma]=pointToPlaneW(TData,tarData,tar_n,W);
+    ntol=abs((E_con-preE_con)/E_con);
+    [opt.R,opt.t,sigma]=pointToPlaneW(TData,tarData,tar_n,W);
     sigma2=sigma;
     if(ntol <= tolerance)
         break;
@@ -44,4 +43,4 @@ while (iter<max_it) % && (sigma2 > 1e-8)% && (ntol<1e-8)
     iter=iter+1;
     disp(iter);
 end
-T=[R,t];
+T=[opt.R,opt.t];

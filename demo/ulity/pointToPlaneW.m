@@ -42,8 +42,16 @@ cn=cn.* W;%前三列
 nv_NM=-nv_NM.*W;
 
 A=cat(3,cn,nv_NM);
-A=reshape(A,[M*N,6]);
 
+for i=1:N
+    for j=1:M
+        TEMP((i-1)*M+j,:)=A(i,j,:);
+    end
+end
+
+A=reshape(A,[M*N,6]);
+result=TEMP-cn;
+sum(sum(result));
 B=repmat(en,1,M);
 B=-B.*origin_W;
 B=reshape(B,[M*N,1]);
@@ -84,3 +92,4 @@ t=permute(t,[2,3,1]);
 
 
 sigma2=sum(sum((cn.*x+nv_NM.*t+en_NM).^2))/M*N;
+sigma2=sigma2(:,:,1);
