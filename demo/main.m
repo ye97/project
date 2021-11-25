@@ -26,7 +26,7 @@ opt.H=10;
 opt.k=5;
 opt.R=eye(3);
 opt.Xi=2;%控制局部向量的权重
-opt.beta=5;%控制权重矩阵
+opt.beta=1;%控制权重矩阵
 opt.alphamax=30;%控制点到面权重
 opt.t=[0,0,0]';
 
@@ -48,8 +48,14 @@ ptCloud2=pointCloud(srcData);
 pcwrite(ptCloud2,'src.ply');
 ptCloud_src = pcread('src.ply');
 ptCloud_tar = pcread('tar.ply')
-[tform2, movingReg, rmse] = pcregistericp(ptCloud_src, ptCloud_tar, 'Extrapolate', true);
-[T]=local_gmm(tarData,srcData,opt);
+[tform2, movingReg, rmse] = pcregistericp(ptCloud_src, ptCloud_tar, 'Extrapolate', true,'Metric',"pointToPlane");
+
+[tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
+[R1,t1]=pointToPlaneMetric(srcData,tarData,tar_n);
+[T_cpd,~,~]=pcregistercpd(ptCloud_src,ptCloud_tar,'Transform',"rigid");
+% [T]=local_gmm(tarData,srcData,opt);
+% 
+% W2=ones(4026,4026);
 
 t2=toc;
 time=t2-t1;

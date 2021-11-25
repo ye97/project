@@ -19,12 +19,7 @@ origin_W=W;
 W=repmat(W,1,1,3);
 W=W.^1/2;
 
-en=sum(q.*nv,2);
-en_NM=repmat(en,1,M);
 
-en_NM=reshape(en_NM,N,1,M);
-en_NM=permute(en_NM,[1,3,2]);
-en_NM=repmat(en_NM,1,1,3);
 
 
 nv_NM=repmat(nv,1,M);
@@ -35,6 +30,7 @@ nv_NM=permute(nv_NM,[1,3,2]);
 p_NM=repmat(p,1,N);
 p_NM=reshape(p_NM, M,3,N);
 p_NM=permute(p_NM,[3,1,2]);
+
 % cn=cross(p,nv);
 cn=bsxfun(@cross,p_NM,nv_NM);
 
@@ -48,12 +44,16 @@ A=cat(3,cn,nv_NM);
 %         TEMP((i-1)*M+j,:)=A(i,j,:);
 %     end
 % end
+A=permute(A,[3,2,1]);
+A=reshape(A,6,N*M);
+A=permute(A,[2,1]);
 
-A=reshape(A,[M*N,6]);
 % result=TEMP-cn;
-sum(sum(result));
+en=sum(q.*nv,2);
+en_NM=repmat(en,1,M);
 B=repmat(en,1,M);
 B=-B.*origin_W;
+B=permute(B,[2,1]);
 B=reshape(B,[M*N,1]);
 % 
 % % W=reshape(W,[M*N,1]);

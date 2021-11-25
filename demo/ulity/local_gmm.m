@@ -23,15 +23,17 @@ tolerance=1e-9;
 preE_con=0;
 %% 
 while (iter<max_it) %&& (ntol<1e-8) % && (sigma2 > 1e-8)% 
-    TData=transform(srcData,opt.R,opt.t);
-    [T_n,T_curvature,T_localVec,T_localDist]=findPointNormals(TData,opt.k);
+    TData=srcData;
+%     TData=transform(srcData,opt.R,opt.t);
+    [~,~,T_localVec,~]=findPointNormals(TData,opt.k);
     %% E step
     paiMatrix=computePai(tar_localVec,T_localVec, opt.beta);
     alpha=compute_alpha(tar_curvature,opt.alphamax);
-    gloDist=compute_gloDist(tarData,TData,tar_n,tar_curvature,alpha);
+    gloDist=compute_gloDist(tarData,TData,tar_n,opt.R,opt.t);
     P_prior =comput_Prior(paiMatrix,gloDist,w,sigma2);
-    alpha_NM=repmat(alpha,1,M);
+    
     W=P_prior.*alpha;
+    
     E_con=compute_E(P_prior,alpha,gloDist,sigma2);
     ntol=abs((E_con-preE_con)/E_con);
     [opt.R,opt.t,sigma]=pointToPlaneW(TData,tarData,tar_n,W);

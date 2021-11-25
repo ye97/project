@@ -28,7 +28,7 @@ src_vecs=permute(src_vecs,[3,1,2]);
 %% 计算相似度 ||tar_vecs-src_vecs||
 patMatrix=(tar_vecs-src_vecs).^2;
 patMatrix=sum(patMatrix,3);
-patMatrix=sqrt(patMatrix);
+% patMatrix=sqrt(patMatrix);
 %% 求和分配权重
 % WeightMatrix=cell2mat(WeightMatrix);
 patMatrix=patMatrix./(-2*beta^2);
