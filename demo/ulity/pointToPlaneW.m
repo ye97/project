@@ -43,14 +43,14 @@ nv_NM=-nv_NM.*W;
 
 A=cat(3,cn,nv_NM);
 
-for i=1:N
-    for j=1:M
-        TEMP((i-1)*M+j,:)=A(i,j,:);
-    end
-end
+% for i=1:N
+%     for j=1:M
+%         TEMP((i-1)*M+j,:)=A(i,j,:);
+%     end
+% end
 
 A=reshape(A,[M*N,6]);
-result=TEMP-cn;
+% result=TEMP-cn;
 sum(sum(result));
 B=repmat(en,1,M);
 B=-B.*origin_W;
