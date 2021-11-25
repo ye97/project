@@ -52,6 +52,9 @@ ptCloud_tar = pcread('tar.ply')
 
 [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
 [R1,t1]=pointToPlaneMetric(srcData,tarData,tar_n);
+W=ones(4026,4026);
+W=W./4026;
+[R_w,t_w,sigma_w]=pointToPlaneW(srcData,tarData,tar_n,W);
 [T_cpd,~,~]=pcregistercpd(ptCloud_src,ptCloud_tar,'Transform',"rigid");
 [T]=local_gmm(tarData,srcData,opt);
 % 

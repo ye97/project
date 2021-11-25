@@ -1,5 +1,5 @@
 function [gloDist]=compute_gloDist(tarData,TData,tar_n,R,t,alpha)
-TData=transform(TData,R,t);
+
 [N,D]=size(tarData);
 [M,D]=size(TData);
 tar_n=repmat(tar_n,1,M);
@@ -20,6 +20,8 @@ tarData=permute(tarData,[1,3,2]);
 
 gloDist=sum((tarData-TData).*tar_n,3);
 gloDist=gloDist.^2;
+alpha=repmat(alpha,1,M);
+gloDist=gloDist.*alpha;
 % gloDist=sqrt(sum((tarData-srcData).^2,3));
 % gloDist=squeeze(gloDist);
 % alpha=repmat(alpha,1,M);
