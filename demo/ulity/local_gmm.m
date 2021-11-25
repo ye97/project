@@ -27,10 +27,11 @@ while (iter<max_it) %&& (ntol<1e-8) % && (sigma2 > 1e-8)%
 %     TData=transform(srcData,opt.R,opt.t);
     [~,~,T_localVec,~]=findPointNormals(TData,opt.k);
     %% E step
-    paiMatrix=computePai(tar_localVec,T_localVec, opt.beta);
+    paiMatrix=ones(N,M)./M;
+%     paiMatrix=computePai(tar_localVec,T_localVec, opt.beta);
     alpha=compute_alpha(tar_curvature,opt.alphamax);
     gloDist=compute_gloDist(tarData,TData,tar_n,opt.R,opt.t);
-    P_prior =comput_Prior(paiMatrix,gloDist,w,sigma2);
+    P_prior =comput_Prior(paiMatrix,gloDist,w,sigma2,alpha);
     
     W=P_prior.*alpha;
     

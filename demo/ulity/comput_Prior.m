@@ -1,9 +1,10 @@
-function [Prior]=comput_Prior(paiMatrix,gloDist,w,sigma2)
+function [Prior]=comput_Prior(paiMatrix,gloDist,w,sigma2,alpha)
 [N,M]=size(gloDist);
 Prior=zeros(N,M);
-
-top=paiMatrix.*exp(-gloDist./(2*sigma2));
+alpha=repmat(alpha,1,M);
+top=paiMatrix.*exp(-gloDist.*alpha./(2*sigma2));
 c  = power(2*pi*sigma2, 1/2) *( w /(1-w) /N );
+
 pMatrix_col=sum(paiMatrix,2);
 pMatrix_col=repmat(pMatrix_col,1,M);
 % pMatrix_bot=permute(pMatrix_col,[2,1]);
