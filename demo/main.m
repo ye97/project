@@ -7,7 +7,7 @@ addpath('./ulity/');
 load p(Bun0);
 shape= data';
 scan=shape(:,1);
-res= 10;
+res= 20;
 scannum=length(shape);
 s=1000;
 jj=1;
@@ -27,18 +27,18 @@ opt.k=5;
 opt.R=eye(3);
 opt.Xi=2;%控制局部向量的权重
 opt.beta=1;%控制权重矩阵
-opt.alphamax=30;%控制点到面权重
+opt.alphamax=1;%控制点到面权重
 opt.t=[0,0,0]';
 
 tarData=model{1,1}';
 srcData=model{1,2}';
-theta = pi/12;
+theta = pi/24;
 rot   = [cos(theta) sin(theta) 0; ...
           -sin(theta) cos(theta) 0; ...
                    0          0  1];
 trans = [5 5 10];
 tform1 = rigid3d(rot, trans);
-srcData=tarData*rot+trans;
+tarData=srcData*rot+trans;
 tic;
 t1=toc;
 ptCloud1=pointCloud(tarData);
@@ -52,11 +52,11 @@ ptCloud_tar = pcread('tar.ply')
 
 [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
 [R1,t1]=pointToPlaneMetric(srcData,tarData,tar_n);
-W=ones(4026,4026);
-W=W./4026;
-[R_w,t_w,sigma_w]=pointToPlaneW(srcData,tarData,tar_n,W);
+paiMatrix=ones(2005,2005)./2005;
+[R_w,t_w,sigma_w]=pointToPlaneW(srcData,tarData,tar_n,paiMatrix);
 [T_cpd,~,~]=pcregistercpd(ptCloud_src,ptCloud_tar,'Transform',"rigid");
-[T]=local_gmm(tarData,srcData,opt);
+
+[T]=local_gmm(srcData,tarData,opt);
 % 
 % W2=ones(4026,4026);
 

@@ -34,8 +34,9 @@ p_NM=permute(p_NM,[3,1,2]);
 
 % cn=cross(p,nv);
 % cn=cross(p_NM,nv_NM,2);
-cn=bsxfun(@cross,p_NM,nv_NM);
-
+cn=bsxfun(@cross,nv_NM,p_NM);
+% cn=cross(p_NM,nv_NM,3);
+cn(:,:,2)=-cn(:,:,2);
 cn=cn.* W;%前三列
 nv_NM=-nv_NM.*W;
 
@@ -46,27 +47,34 @@ A=cat(3,cn,nv_NM);
 %         TEMP((i-1)*M+j,:)=A(i,j,:);
 %     end
 % end
+
+% A=reshape(A,N*M,6);
+
 A=permute(A,[3,2,1]);
 A=reshape(A,6,N*M);
-A=permute(A,[2,1]);
+A=A';
+
+
+
+% A=permute(A,[2,1,3]);
+% A=reshape(A,N*M,6);
 
 % result=TEMP-cn;
+
 en=sum(q.*nv,2);
 en_NM=repmat(en,1,M);
 B=repmat(en,1,M);
-
+B=-B.*(origin_W.^1/2);
 B=permute(B,[2,1]);
 B=reshape(B,[M*N,1]);
 
-w=permute(origin_W,[2,1]);
-w=reshape(w,[M*N,1]);
 
-B=-B.*w;
+
 
 % 
 % % W=reshape(W,[M*N,1]);
 
-X=inv((A'*A))*A'*B;
+X=(A'*A)\A'*B;
 % for i=1:N
 %     for j=1:M
 %         TEMP(i,j,:)=cross(p(i,j,:),nv(i,j,:));
@@ -81,14 +89,15 @@ cz = cos(X(3));
 sx = sin(X(1));
 sy = sin(X(2));
 sz = sin(X(3));
-
-R = [cy*cz, sx*sy*cz-cx*sz, cx*sy*cz+sx*sz;
-    cy*sz, cx*cz+sx*sy*sz, cx*sy*sz-sx*cz;
-    -sy,          sx*cy,          cx*cy];
+R=[1,0,0;0,cx,sx;0,-sx,cx;]*[cy,0,-sy;0,1,0; sy,0,cy;]*[cz,sz,0; -sz,cz,0;0,0,1;];
+% R = [cy*cz, sx*sy*cz-cx*sz, cx*sy*cz+sx*sz;
+%     cy*sz, cx*cz+sx*sy*sz, cx*sy*sz-sx*cz;
+%     -sy,          sx*cy,          cx*cy];
 
 T = X(4:6);
 
 x=X(1:3);
+
 x=repmat(x,1,M*N);
 x=reshape(x,3,N,M);
 x=permute(x,[2,3,1]);

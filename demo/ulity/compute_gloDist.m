@@ -1,5 +1,4 @@
-function [gloDist]=compute_gloDist(tarData,TData,tar_n,R,t,alpha)
-
+function [gloDist]=compute_gloDist(tarData,TData,tar_n,alpha)
 [N,D]=size(tarData);
 [M,D]=size(TData);
 tar_n=repmat(tar_n,1,M);
