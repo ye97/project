@@ -47,7 +47,6 @@ time1=toc;
 cpd_plot_iter(tarData,srcData);
 hold on;
 T=local_cpd(srcData,tarData,opt);
-
 % [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
 % [opt.R,opt.t,sigma]=test_planeW(srcData,tarData,tar_n,P_prior);
 time2=toc;
