@@ -38,7 +38,8 @@ if d==2,
 %    plot(X(:,1), X(:,2),'r*', Y(:,1), Y(:,2),'bo'); %axis off; axis([-1.5 2 -1.5 2]);
 else
 % for 3D case
-   plot3(X(:,1),X(:,2),X(:,3),'r.',Y(:,1),Y(:,2),Y(:,3),'bo'); % title('X data (red). Y GMM centroids (blue)');set(gca,'CameraPosition',[15 -50 8]);
+   plot3(X(:,1),X(:,2),X(:,3),'r.',Y(:,1),Y(:,2),Y(:,3),'bo'); 
+   title('X data (red). Y GMM centroids (blue)');set(gca,'CameraPosition',[15 -50 8]);
 end
 
 % plot correspondences

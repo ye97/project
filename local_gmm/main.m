@@ -35,9 +35,9 @@ opt.radii = 2000*0.002;
 opt.H=10;
 opt.k=7;
 opt.R=eye(3);
-opt.Xi=2;%控制局部向量的权重
-opt.beta=1;%控制权重矩阵
-opt.alphamax=30;%控制点到面权重
+opt.Xi=1;%控制局部向量的权重
+opt.beta=0.2;%控制权重矩阵
+opt.alphamax=1;%控制点到面权重
 opt.t=[0,0,0]';
 opt.R=eye(3);
 
@@ -45,7 +45,7 @@ opt.R=eye(3);
 tic;
 time1=toc;
 cpd_plot_iter(tarData,srcData);
-hold on;
+hold off;
 T=local_cpd(srcData,tarData,opt);
 % [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
 % [opt.R,opt.t,sigma]=test_planeW(srcData,tarData,tar_n,P_prior);
