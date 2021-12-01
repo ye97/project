@@ -10,3 +10,7 @@ a=a.^(1/2);
 p=rand(3,3);
 q=rand(4,3);
 temp=p-q;
+
+A=rand(N,M,3);
+B=rand(N,M,3);
+TEST= bsxfun(@)
