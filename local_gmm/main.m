@@ -18,7 +18,7 @@ for i=1:scannum
     model{i}=scan{i}(1:3,1:res:end);
     model{i} = awgn(model{i},25*jj);
 end
-tarData=model{1,1}';
+
 srcData=model{1,2}';
 theta = pi/12;
 rot   = [cos(theta) sin(theta) 0; ...
@@ -33,13 +33,14 @@ tarData=srcData*rot+trans;
 opt.downSample=0;
 opt.radii = 2000*0.002;
 opt.H=10;
-opt.k=7;
+opt.k=5;
 opt.R=eye(3);
-opt.Xi=1;%控制局部向量的权重
-opt.beta=0.2;%控制权重矩阵
+opt.Xi=1.2;%控制局部向量的权重
+opt.beta=3;%控制权重矩阵
 opt.alphamax=1;%控制点到面权重
 opt.t=[0,0,0]';
 opt.R=eye(3);
+opt.normalize=1;
 
 %% local cpd
 tic;

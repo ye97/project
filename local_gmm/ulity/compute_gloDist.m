@@ -10,7 +10,7 @@ y_dist=repmat(y_dist,[1,M]);
 gloDist=-x_dist+y_dist;
 gloDist=gloDist.^2;
 alpha=repmat(alpha,1,M);
-gloDist=gloDist.*alpha;
+% gloDist=gloDist.*alpha;
 %% 
 
 % gloDist=sqrt(sum((tarData-TData).^2,3));
