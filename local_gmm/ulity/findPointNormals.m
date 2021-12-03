@@ -92,7 +92,7 @@ n = n(:,2:end);
 
 %find difference in position from neighbouring points
 p = repmat(points(:,1:3),numNeighbours,1) - points(n(:),1:3);
-p = reshape(p, size(points,1),numNeighbours,3);
+p = reshape(p, [size(points,1),numNeighbours,3]);
 
 localDist=sqrt(sum(p.*p,3));
 localDist=repmat(localDist,1,1,3);
