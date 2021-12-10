@@ -12,8 +12,6 @@ function [R, T,sigma2] = test_planeW(p, q, nv,W)
 [M,D]=size(p);
 
 
-
-
 origin_W=W;
 W=permute(W,[2,1]);
 W=reshape(W,N*M,1);

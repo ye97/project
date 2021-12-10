@@ -1,6 +1,6 @@
 function [paiMatrix] = computePai(tar_vecs,src_vecs,beta)
 
-paiMatrix=[];
+
 size_Tar=size(tar_vecs);
 size_Src=size(src_vecs);
 N=size_Tar(1);

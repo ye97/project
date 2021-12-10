@@ -17,11 +17,11 @@ end
 iter=0;
 max_it=100;
 WeightMatrix=[];
-ntol=0;
+ntol=10;
 tolerance=1e-9;
 preE_con=0;
 TData=srcData;
-
+paiMatrix=ones(N,M)./M;
 %% 
 while (iter<max_it) %&& (ntol<1e-8) % && (sigma2 > 1e-8)% 
 %      TData=srcData;
@@ -30,8 +30,8 @@ while (iter<max_it) %&& (ntol<1e-8) % && (sigma2 > 1e-8)%
     TData=transform(TData,opt.R,opt.t);
     [T_n,~,T_localVec,~]=findPointNormals(TData,opt.H);
     %% E step
-%     paiMatrix=ones(N,M)./M;
-    paiMatrix=computePai(tar_localVec,T_localVec, opt.beta);
+    
+%     paiMatrix=computePai(tar_localVec,T_localVec, opt.beta);
     alpha=compute_alpha(tar_curvature,opt.alphamax); 
     gloDist=compute_gloDist(tarData,TData,tar_n,alpha);
     [P_prior, E_con] =comput_Prior(paiMatrix,gloDist,w,sigma2);

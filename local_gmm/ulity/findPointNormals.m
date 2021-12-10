@@ -1,7 +1,7 @@
 % Copyright (c) 2015, Zachary Taylor
 % All rights reserved.
 
-function [ normals, curvature,vecs ,localDist] = findPointNormals(points, numNeighbours,Xi,viewPoint, dirLargest)
+function [ normals, curvature,vecs ,localDist] = findPointNormals(points, numNeighbours,k,Xi,viewPoint, dirLargest)
 %FINDPOINTNORMALS Estimates the normals of a sparse set of n 3d points by
 % using a set of the closest neighbours to approximate a plane.
 %
@@ -48,14 +48,28 @@ else
     end
 end
 
-
 if(nargin < 3)
+    k=[];
+end
+if (isempty(k))
+    k=5;
+else
+    validateattributes(k, {'numeric'},{'scalar','positive'});
+    if(k>numNeighbours)
+        warning(['%i neighbouring points will be used to caculate normals and curvature'...
+            ' %i neighbouring points will be used to caculate local vectors '...
+            ' please make sure the latter be smaller'],numNeighbours,k);
+    end 
+end
+
+    
+if(nargin < 4)
     Xi=2;
 end
 
 
 
-if(nargin < 4)
+if(nargin < 5)
     viewPoint = [];
 end
 if(isempty(viewPoint))
@@ -64,7 +78,7 @@ else
     validateattributes(viewPoint, {'numeric'},{'size',[1,3]});
 end
 
-if(nargin<5)
+if(nargin<6)
     dirLargest = [];
 end
 if(isempty(dirLargest))
@@ -94,10 +108,14 @@ n = n(:,2:end);
 p = repmat(points(:,1:3),numNeighbours,1) - points(n(:),1:3);
 p = reshape(p, [size(points,1),numNeighbours,3]);
 
-localDist=sqrt(sum(p.*p,3));
+kn=n(:,2:k+1);
+
+localP=repmat(points(:,1:3),k,1) - points(kn(:),1:3);
+localP = reshape(localP, [size(points,1),k,3]);
+localDist=sqrt(sum(localP.*localP,3));
 localDist=repmat(localDist,1,1,3);
 
-vecs=exp(-localDist./Xi^2).*p;
+vecs=exp(-localDist./Xi^2).*localP;
 vecs=sum(vecs,2);
 vecs=squeeze(vecs);
 % 4026 *5*3;

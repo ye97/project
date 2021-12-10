@@ -12,4 +12,4 @@ Prior=top./repmat(sum_temp,1,M);
 Prior=Prior';
 Np=sum(sum(Prior));
 % L =  sum(log(sum_temp)) + D*N*log(sigma2)/2;
-L=  sum(sum(Prior.*gloDist))/2*sigma2+ Np*log(sigma2)/2;
+L=  sum(sum(Prior.*(gloDist/sigma2+ log(sigma2))))/N;

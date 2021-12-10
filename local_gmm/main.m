@@ -16,7 +16,7 @@ end
 for i=1:scannum
     %每10个取一个点
     model{i}=scan{i}(1:3,1:res:end);
-    model{i} = awgn(model{i},25*jj);
+%     model{i} = awgn(model{i},25*jj);
 end
 
 srcData=model{1,2}';
@@ -24,7 +24,7 @@ theta = pi/12;
 rot   = [cos(theta) sin(theta) 0; ...
           -sin(theta) cos(theta) 0; ...
                    0          0  1];
-trans = [20 5 10];
+trans = [10 5 10];
 tform1 = rigid3d(rot, trans);
 tarData=srcData*rot+trans;
 
@@ -47,9 +47,13 @@ tic;
 time1=toc;
 cpd_plot_iter(tarData,srcData);
 hold off;
+
+[tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.H,opt.k);
+[N,D]=size(tarData);
+[M,D]=size(srcData);
+paiMatrix=ones(N,M)./M;
+[opt.R,opt.t,sigma]=test_planeW(srcData,tarData,tar_n,paiMatrix);
 T=local_cpd(srcData,tarData,opt);
-% [tar_n,tar_curvature,tar_localVec,tar_localDist]=findPointNormals(tarData,opt.k);
-% [opt.R,opt.t,sigma]=test_planeW(srcData,tarData,tar_n,P_prior);
 time2=toc;
 time=time2-time1;
 
