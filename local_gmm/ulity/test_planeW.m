@@ -18,16 +18,23 @@ W=reshape(W,N*M,1);
 
 W=W.^(1/2);
 
-en=sum(q.*nv,2);
+en=q*nv';
+en=diag(en);
 en=repmat(en,1,M);
-en=permute(en,[2,1]);
-en=reshape(en,N*M,1);
-en_NM=en;
-B=-en.*W;
+en_NM=reshape(en',N*M,1);
+% en=sum(q.*nv,2);
+% en=repmat(en,1,M);
+% en=permute(en,[2,1]);
+% en=reshape(en,N*M,1);
 
-d=repelem(nv,M,1).*repmat(p,N,1);
-d=sum(d,2);
-d=d.*W;
+B=-en_NM.*W;
+
+d=nv*p';
+d=reshape(-d',N*M,1);
+d=-d.*W;
+% d=repelem(nv,M,1).*repmat(p,N,1);
+% d=sum(d,2);
+% d=d.*W;
 B=B+d;
 
 W=repmat(W,1,3);
